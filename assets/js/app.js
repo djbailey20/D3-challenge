@@ -140,6 +140,7 @@ const graph = (data, x = "poverty", y = "healthcare") => {
   obesityAxis.classed("active", y == "obesity").on("click", () => {
     graph(data, x, "obesity");
   });
+
   tip.html(
     (d) =>
       "<p style='font-weight:bold;font-size:15px'>" +
@@ -155,12 +156,13 @@ const graph = (data, x = "poverty", y = "healthcare") => {
       d[y] +
       "</p>"
   );
-  tooltips
-    .transition()
-    .duration(500)
-    .attr("y", (d) => yLinearScale(d[y]) - 10)
-    .attr("x", (d) => xLinearScale(d[x]) - 10);
+  // tooltips
+  //   .transition()
+  //   .duration(500)
+  //   .attr("y", (d) => yLinearScale(d[y]) - 10)
+  //   .attr("x", (d) => xLinearScale(d[x]) - 10);
 };
+//END GRAPH FUNCTION
 
 d3.csv("./assets/data/data.csv").then((data) => {
   console.log(data);
@@ -178,19 +180,21 @@ d3.csv("./assets/data/data.csv").then((data) => {
     .selectAll("circle")
     .data(data)
     .enter()
-    .append("g");
-  circles = circleGroup.append("circle");
-  text = circleGroup.append("text").text((d) => d.abbr);
-  tooltips = chartGroup
-    .selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("width", 20)
-    .attr("height", 20)
-    .attr("opacity", 0)
+    .append("g")
     .on("mouseover", tip.show)
     .on("mouseout", tip.hide);
+  circles = circleGroup.append("circle");
+  text = circleGroup.append("text").text((d) => d.abbr);
+  // tooltips = chartGroup
+  //   .selectAll("rect")
+  //   .data(data)
+  //   .enter()
+  //   .append("rect")
+  //   .attr("width", 20)
+  //   .attr("height", 20)
+  //   .attr("opacity", 0)
+  //   .on("mouseover", tip.show)
+  //   .on("mouseout", tip.hide);
 
   graph(data);
 });
