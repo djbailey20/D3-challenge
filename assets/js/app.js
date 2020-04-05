@@ -8,14 +8,14 @@ var margin = {
   top: 20,
   right: 40,
   bottom: 100,
-  left: 100
+  left: 100,
 };
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
 var svg = d3
-  .select(".container")
+  .select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
@@ -87,34 +87,28 @@ const graph = (data, x = "poverty", y = "healthcare") => {
   var xLinearScale = d3
     .scaleLinear()
     .range([0, width])
-    .domain([d3.min(data, d => d[x]), d3.max(data, d => d[x])]);
+    .domain([d3.min(data, (d) => d[x]), d3.max(data, (d) => d[x])]);
   var yLinearScale = d3
     .scaleLinear()
     .range([height, 0])
-    .domain([d3.min(data, d => d[y]), d3.max(data, d => d[y])]);
+    .domain([d3.min(data, (d) => d[y]), d3.max(data, (d) => d[y])]);
   var bottomAxis = d3.axisBottom(xLinearScale);
   var leftAxis = d3.axisLeft(yLinearScale);
 
-  bottomAxisGroup
-    .transition()
-    .duration(500)
-    .call(bottomAxis);
-  leftAxisGroup
-    .transition()
-    .duration(500)
-    .call(leftAxis);
+  bottomAxisGroup.transition().duration(500).call(bottomAxis);
+  leftAxisGroup.transition().duration(500).call(leftAxis);
   circles
     .transition()
     .duration(500)
-    .attr("cx", d => xLinearScale(d[x]))
-    .attr("cy", d => yLinearScale(d[y]))
+    .attr("cx", (d) => xLinearScale(d[x]))
+    .attr("cy", (d) => yLinearScale(d[y]))
     .attr("r", 10)
     .style("fill", "#8cc8ff");
   text
     .transition()
     .duration(500)
-    .attr("dy", d => yLinearScale(d[y]) + 4)
-    .attr("dx", d => xLinearScale(d[x]))
+    .attr("dy", (d) => yLinearScale(d[y]) + 4)
+    .attr("dx", (d) => xLinearScale(d[x]))
     .style("font-size", "10px")
     .style("text-anchor", "middle")
     .style("stroke-width", "10px")
@@ -147,7 +141,7 @@ const graph = (data, x = "poverty", y = "healthcare") => {
     graph(data, x, "obesity");
   });
   tip.html(
-    d =>
+    (d) =>
       "<p style='font-weight:bold;font-size:15px'>" +
       d.state +
       "</p>" +
@@ -164,13 +158,13 @@ const graph = (data, x = "poverty", y = "healthcare") => {
   tooltips
     .transition()
     .duration(500)
-    .attr("y", d => yLinearScale(d[y]) - 10)
-    .attr("x", d => xLinearScale(d[x]) - 10);
+    .attr("y", (d) => yLinearScale(d[y]) - 10)
+    .attr("x", (d) => xLinearScale(d[x]) - 10);
 };
 
-d3.csv("./assets/data/data.csv").then(data => {
+d3.csv("./assets/data/data.csv").then((data) => {
   console.log(data);
-  data.forEach(function(d) {
+  data.forEach(function (d) {
     d.poverty = +d.poverty;
     d.healthcare = +d.healthcare;
     d.smokes = +d.smokes;
@@ -186,7 +180,7 @@ d3.csv("./assets/data/data.csv").then(data => {
     .enter()
     .append("g");
   circles = circleGroup.append("circle");
-  text = circleGroup.append("text").text(d => d.abbr);
+  text = circleGroup.append("text").text((d) => d.abbr);
   tooltips = chartGroup
     .selectAll("rect")
     .data(data)
